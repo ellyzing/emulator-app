@@ -14,7 +14,7 @@ public class DecryptKurs {
 		keyValue = key.getBytes(); //получаем побайтово ключ
 		ALGORITM = mode; // Получаем алгоритм шифрования
 	}
-
+	
 	private Key generateKey() {
 		Key key = new SecretKeySpec(keyValue, ALGORITM);
 		return key;
@@ -27,18 +27,14 @@ public class DecryptKurs {
 		String decodedString = new String(decValue);
 		return decodedString;
 	}
-	
 
 	public static void main(String[] args) throws NoSuchPaddingException, Exception  {
-		
         BufferedReader reader = new BufferedReader( // тестовый ввод данных
                 new InputStreamReader(System.in)); // тестовый ввод данных
         String title = reader.readLine(); // тестовый ввод данных
 		String myKey = "0123456789ABCDEFFEDCBA98"; // Задаем ключ
 		String Pin = title; // Задаем значение пин-кода ( в данном случае это тестовые вводные данные)
 		DecryptKurs DESede = new DecryptKurs(myKey, "DESede"); // Шифруем нашим ключом при помощи алгоритма 3DES
-		//String 	encodedString = DESede.encrypt(Pin); // Форматируем данные в BASE64
-		//System.out.println("BASE64 encoded string: " + encodedString);
 		String decodedString = DESede.decrypt(Pin); //Получаем данные из формата BASE64
 		System.out.println("BASE64 decoded string: " + decodedString);
 		}
