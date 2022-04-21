@@ -1,0 +1,51 @@
+import java.io.BufferedReader; // Библиотека для тестового ввода данных
+import java.io.InputStreamReader; // Библиотека для тестового ввода данных
+import java.security.Key;
+import java.util.Base64;  //Алгоритм base64 применяется там, где нет возможности гарантировать бережного обращения с вашей информацией
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+
+public class DecryptKurs {
+
+	private static String ALGORITM = "DESede"; // Указываем алгоритм шифрования
+	private byte[] keyValue; // Получаем значение ключа
+	public DecryptKurs( String key, String mode) { 
+		keyValue = key.getBytes(); //получаем побайтово ключ
+		ALGORITM = mode; // Получаем алгоритм шифрования
+	}
+
+	private Key generateKey() {
+		Key key = new SecretKeySpec(keyValue, ALGORITM);
+		return key;
+	}
+	public String decrypt(String encryptedData) throws Exception, NoSuchPaddingException{
+		Key key = generateKey();
+		Cipher cphr = Cipher.getInstance(ALGORITM);
+		cphr.init(Cipher.DECRYPT_MODE, key);
+		byte[] decValue = cphr.doFinal(Base64.getDecoder().decode(encryptedData));
+		String decodedString = new String(decValue);
+		return decodedString;
+	}
+	
+
+	public static void main(String[] args) throws NoSuchPaddingException, Exception  {
+		
+        BufferedReader reader = new BufferedReader( // тестовый ввод данных
+                new InputStreamReader(System.in)); // тестовый ввод данных
+        String title = reader.readLine(); // тестовый ввод данных
+		String myKey = "0123456789ABCDEFFEDCBA98"; // Задаем ключ
+		String Pin = title; // Задаем значение пин-кода ( в данном случае это тестовые вводные данные)
+		DecryptKurs DESede = new DecryptKurs(myKey, "DESede"); // Шифруем нашим ключом при помощи алгоритма 3DES
+		//String 	encodedString = DESede.encrypt(Pin); // Форматируем данные в BASE64
+		//System.out.println("BASE64 encoded string: " + encodedString);
+		String decodedString = DESede.decrypt(Pin); //Получаем данные из формата BASE64
+		System.out.println("BASE64 decoded string: " + decodedString);
+		}
+
+	
+	
+	
+	
+	}
+		
