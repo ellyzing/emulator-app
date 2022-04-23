@@ -2,10 +2,11 @@ package com.springboot.emulatorapp.service;
 import java.util.List;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.springboot.emulatorapp.model.Card;
-
-@SpringBootApplication
+@Component
 public interface CardService {
 
     /**

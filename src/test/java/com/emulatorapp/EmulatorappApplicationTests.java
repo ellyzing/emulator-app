@@ -1,10 +1,10 @@
-package com.springboot.emulatorapp;
+package com.emulatorapp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EmulatorAppApplicationTests {
+class EmulatorappApplicationTests {
 
 	@Test
 	void contextLoads() {
