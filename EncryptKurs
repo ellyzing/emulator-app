@@ -1,3 +1,5 @@
+package main.java.com.springboot.emulatorapp;
+
 import java.io.BufferedReader; // Библиотека для тестового ввода данных
 import java.io.InputStreamReader; // Библиотека для тестового ввода данных
 import java.security.Key;
@@ -8,70 +10,69 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class EncryptKurs {
 
-	private static String ALGORITM = "DESede"; // Указываем алгоритм шифрования
-	private byte[] keyValue; // Получаем значение ключа
-	public EncryptKurs( String key, String mode) { 
-		keyValue = decodeHexString(key); //получаем побайтово ключ
-		ALGORITM = mode; // Получаем алгоритм шифрования
-	}
+    public static void main(String[] args) throws Exception {
+        String Pin = "0648"; // Задаем значение пин-кода ( в данном случае это тестовые вводные данные)
+        EncProc(Pin);
+    }
+    public static String EncProc(String Data) throws NoSuchPaddingException, Exception {
+        String myKey = "0123456789ABCDEFFEDCBA98765432100123456789ABCDEF"; // Задаем ключ
+        EncryptKurs DESede = new EncryptKurs(myKey, "DESede"); // Шифруем нашим ключом при помощи алгоритма 3DES
+        String 	encodedString = DESede.encrypt(Data); // Форматируем данные в BASE64
+        System.out.println(/*"Encoded string: " + */ encodedString); // Вывод
+        return(encodedString);
+    }
+    private static String ALGORITM = "DESede"; // Указываем алгоритм шифрования
+    private byte[] keyValue; // Получаем значение ключа
+    public EncryptKurs( String key, String mode) {
+        keyValue = decodeHexString(key); //получаем побайтово ключ
+        ALGORITM = mode; // Получаем алгоритм шифрования
+    }
 
-	private Key generateKey() {
-		Key key = new SecretKeySpec(keyValue, ALGORITM);
-		return key;
-	}
-	public String encrypt(String Data) throws Exception, NoSuchPaddingException{
-		Key key = generateKey();
-		Cipher cphr = Cipher.getInstance(ALGORITM);
-		cphr.init(Cipher.ENCRYPT_MODE, key);
-		byte[] encValue = cphr.doFinal(Data.getBytes());
-		String encryptedValue = Base64.getEncoder().encodeToString(encValue);
-		return encryptedValue;
-	}
-	public static void main(String[] args) throws NoSuchPaddingException, Exception  {
-		
-        BufferedReader reader = new BufferedReader( // тестовый ввод данных
-                new InputStreamReader(System.in)); // тестовый ввод данных
-        String title = reader.readLine(); // тестовый ввод данных
-		String myKey = "0123456789ABCDEFFEDCBA98765432100123456789ABCDEF"; // Задаем ключ
-		String Pin = title; // Задаем значение пин-кода ( в данном случае это тестовые вводные данные)
-		EncryptKurs DESede = new EncryptKurs(myKey, "DESede"); // Шифруем нашим ключом при помощи алгоритма 3DES
-		String 	encodedString = DESede.encrypt(Pin); // Форматируем данные в BASE64
-		System.out.println("Encoded string: " + encodedString); // Вывод
-		}
+    private Key generateKey() {
+        Key key = new SecretKeySpec(keyValue, ALGORITM);
+        return key;
+    }
+    public String encrypt(String Data) throws Exception, NoSuchPaddingException{
+        Key key = generateKey();
+        Cipher cphr = Cipher.getInstance(ALGORITM);
+        cphr.init(Cipher.ENCRYPT_MODE, key);
+        byte[] encValue = cphr.doFinal(Data.getBytes());
+        String encryptedValue = Base64.getEncoder().encodeToString(encValue);
+        return encryptedValue;
+    }
 
-	public static String byteToHex(byte num) {
-	    char[] hexDigits = new char[2];
-	    hexDigits[0] = Character.forDigit((num >> 4) & 0xF, 16);
-	    hexDigits[1] = Character.forDigit((num & 0xF), 16);
-	    return new String(hexDigits);
-	}
-	public static  byte hexToByte(String hexString) {
-	    int firstDigit = toDigit(hexString.charAt(0));
-	    int secondDigit = toDigit(hexString.charAt(1));
-	    return (byte) ((firstDigit << 4) + secondDigit);
-	}
+    public static String byteToHex(byte num) {
+        char[] hexDigits = new char[2];
+        hexDigits[0] = Character.forDigit((num >> 4) & 0xF, 16);
+        hexDigits[1] = Character.forDigit((num & 0xF), 16);
+        return new String(hexDigits);
+    }
+    public static  byte hexToByte(String hexString) {
+        int firstDigit = toDigit(hexString.charAt(0));
+        int secondDigit = toDigit(hexString.charAt(1));
+        return (byte) ((firstDigit << 4) + secondDigit);
+    }
 
-	private static int toDigit(char hexChar) {
-	    int digit = Character.digit(hexChar, 16);
-	    return digit;
-	}
-	public static String encodeHexString(byte[] byteArray) {
-	    StringBuffer hexStringBuffer = new StringBuffer();
-	    for (int i = 0; i < byteArray.length; i++) {
-	        hexStringBuffer.append(byteToHex(byteArray[i]));
-	    }
-	    return hexStringBuffer.toString();
-	}
-	public static byte[] decodeHexString(String hexString) {
-	    byte[] bytes = new byte[hexString.length() / 2];
-	    for (int i = 0; i < hexString.length(); i += 2) {
-	        bytes[i / 2] = hexToByte(hexString.substring(i, i + 2));
-	    }
-	    return bytes;
-	}	
-	
-	
-	
-	}
-		
-	
+    private static int toDigit(char hexChar) {
+        int digit = Character.digit(hexChar, 16);
+        return digit;
+    }
+    public static String encodeHexString(byte[] byteArray) {
+        StringBuffer hexStringBuffer = new StringBuffer();
+        for (int i = 0; i < byteArray.length; i++) {
+            hexStringBuffer.append(byteToHex(byteArray[i]));
+        }
+        return hexStringBuffer.toString();
+    }
+    public static byte[] decodeHexString(String hexString) {
+        byte[] bytes = new byte[hexString.length() / 2];
+        for (int i = 0; i < hexString.length(); i += 2) {
+            bytes[i / 2] = hexToByte(hexString.substring(i, i + 2));
+        }
+        return bytes;
+    }
+
+
+
+}
+
